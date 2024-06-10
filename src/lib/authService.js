@@ -3,12 +3,12 @@ import axios from 'axios';
 
 export const loginUser = async () => {
   try {
-    console.log('API_BASE_URL:', process.env.API_BASE_URL);
-    console.log('USERNAME:', process.env.USERNAME);
-    console.log('PASSWORD:', process.env.PASSWORD);
+    console.log('API_BASE_URL:', process.env.NEXT_PUBLIC_API_BASE_URL);
+    console.log('USERNAME:', process.env.NEXT_PUBLIC_USERNAME);
+    console.log('PASSWORD:', process.env.NEXT_PUBLIC_PASSWORD);
 
-    const response = await axios.post(`${process.env.API_BASE_URL}/auth/login`, 
-      `grant_type=password&username=${encodeURIComponent(process.env.USERNAME)}&password=${encodeURIComponent(process.env.PASSWORD)}`,
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`, 
+      `grant_type=password&username=${encodeURIComponent(process.env.NEXT_PUBLIC_USERNAME)}&password=${encodeURIComponent(process.env.NEXT_PUBLIC_PASSWORD)}`,
       {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
