@@ -2,9 +2,10 @@ import axios from 'axios';
 
 const API_BASE_URL = 'https://api.dev.unified.community/v1';
 
-export const fetchFeed = async (token, cursor = '') => {
+export const fetchFeed = async (token, cursor = '', limit = 10) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/feed`, {
+    const url = `${API_BASE_URL}/feed?limit=${limit}${cursor ? `&cursor=${cursor}` : ''}`;
+    const response = await axios.get(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -15,18 +16,3 @@ export const fetchFeed = async (token, cursor = '') => {
     return { posts: [], pagination: { next_cursor: '' } };
   }
 };
-
-
-export const fetchPost = async (token, postId) => {
-    try {
-      const response = await axios.get(`https://api.dev.unified.community/v1/posts/${postId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching post:', error);
-      throw error;
-    }
-  };
