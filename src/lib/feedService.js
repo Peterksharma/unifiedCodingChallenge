@@ -4,7 +4,7 @@ const API_BASE_URL = 'https://api.dev.unified.community/v1';
 
 export const fetchFeed = async (token, cursor = '') => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/feed?limit=10&cursor=${cursor}`, {
+    const response = await axios.get(`${API_BASE_URL}/feed`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -16,16 +16,17 @@ export const fetchFeed = async (token, cursor = '') => {
   }
 };
 
+
 export const fetchPost = async (token, postId) => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/posts/${postId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching post:', error);
-    return null;
-  }
-};
+    try {
+      const response = await axios.get(`https://api.dev.unified.community/v1/posts/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching post:', error);
+      throw error;
+    }
+  };
