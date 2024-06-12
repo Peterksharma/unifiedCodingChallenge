@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { fetchFeed } from '../../src/lib/feedService';
 import styles from './FeedPage.module.css';
 
+//Handling the image attachments + videos
 const Attachment = ({ attachment }) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
 
@@ -13,6 +14,7 @@ const Attachment = ({ attachment }) => {
     setIsFullScreen(!isFullScreen);
   };
 
+  //Identify the images
   const renderMedia = () => {
     if (attachment.mime_type.includes('image')) {
       return (
@@ -23,9 +25,11 @@ const Attachment = ({ attachment }) => {
           height={250}
           loading="lazy"
           onClick={handleMediaClick}
+          //Ternary for SPEEEEEED
           className={isFullScreen ? styles.fullScreenImage : ''}
         />
       );
+      //Identify the video
     } else if (attachment.mime_type.includes('video')) {
       return (
         <video
@@ -115,12 +119,12 @@ const FeedPage = ({ token }) => {
         setCursor(data.pagination.next_cursor);
         setIsLoading(false);
       } catch (error) {
-        console.error('Error fetching feed:', error);
         setError('Failed to fetch feed. Please try again.');
         setIsLogading(false);
       }
     };
 
+    // I used IntersectionObserver to help with the lazy load of the feed.
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && !isLoading) {
@@ -141,6 +145,7 @@ const FeedPage = ({ token }) => {
     };
   }, [token, cursor, isLoading]);
 
+  //Increment and decrement the like/unline
   const handleLikeClick = (postId) => {
     const updatedLikedPosts = [...likedPosts];
     const index = updatedLikedPosts.indexOf(postId);
@@ -164,10 +169,12 @@ const FeedPage = ({ token }) => {
     localStorage.setItem('likeCounts', JSON.stringify(likeCounts));
   };
 
+  //format the time for the extra wow factor
   const formatCreatedAt = (createdAt) => {
     const date = new Date(createdAt);
     return date.toLocaleString();
   };
+
 
   const renderAttachments = (attachments) => {
     if (!attachments || attachments.length === 0) {
@@ -218,29 +225,34 @@ const FeedPage = ({ token }) => {
             <p className={styles.postLikes}>
               Likes: {likeCounts[post.id] || post.likes}
             </p>
+
             <button
               className={styles.likeButton}
               onClick={() => handleLikeClick(post.id)}
             >
               {likedPosts.includes(post.id) ? 'Unlike' : 'Like'}
             </button>
-            {renderAttachments(post.attachments)}
-            <p>Created At: {formatCreatedAt(post.created_at)}</p>
-          </div>
 
-          {post.featured_children && post.featured_children.length > 0 && (
-            <div className={styles.childPostsContainer}>
-              {post.featured_children.map((childPost) => (
-                <div key={childPost.id} className={styles.childPostWrapper}>
-                  <ChildPost post={childPost} renderAttachments={renderAttachments} />
+            {post.attachments && post.attachments.length > 0 && (
+              <>
+                <p>Media:</p>
+                {renderAttachments(post.attachments)}
+              </>
+            )}
+
+            {post.featured_children && post.featured_children.length > 0 && (
+              <div className={styles.responseSection}>
+                <div className={styles.responseCount}>
+                  <p>{post.featured_children.length} response(s)</p>
                 </div>
-              ))}
-            </div>
-            
-          )}
-                    <Link href={`/posts/${post.id}`} className={styles.postLink}>
-            <p>Click here to see just this post.</p>
-          </Link>
+
+              </div>
+
+            )}
+            <Link href={`/posts/${post.id}`} className={styles.postLink}>
+              Click here to see just this post.
+            </Link>
+          </div>
         </div>
       ))}
       <div ref={loaderRef} className={styles.loadingContainer}>

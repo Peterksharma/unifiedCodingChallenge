@@ -1,44 +1,86 @@
+.authorProfilePic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.authorProfilePic:hover {
+  opacity: 0.8;
+}
+
 .pageContainer {
-    padding: 20px;
-    max-width: 800px;
-    margin: auto;
-  }
-  
-  .postContainer {
-    border: 1px solid #ccc;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-  }
-  
-  .header {
-    color: #333;
-    text-align: center;
-  }
-  
-  .loadingContainer {
-    text-align: center;
-    margin-top: 20px;
-  }
-  
-  .attachmentContainer {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    padding: 10px;
-  }
-  
-  .imageContainer {
-    margin-top: 10px;
-    border: 1px solid #ddd;
-    padding: 10px;
-    display: inline-block;
-  }
-  
-  .attachmentWrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.postContainer {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.postContent {
+  margin-bottom: 20px;
+}
+
+.authorInfo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.authorName {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.postTitle {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.postDescription {
+  margin-bottom: 10px;
+}
+
+.postLikes {
+  margin-bottom: 10px;
+}
+
+.attachmentContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.attachmentWrapper {
   position: relative;
   display: inline-block;
+  width: 100%;
+  padding-bottom: 100%;
+}
+
+.attachmentWrapper img,
+.attachmentWrapper video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .fullScreenImage {
@@ -52,149 +94,77 @@
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-.pageContainer {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .header {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
-  
-  .postContainer {
-    background-color: #f5f5f5;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-  
-  .postContent {
-    flex: 1;
-  }
-  
-  .postLink {
-    margin-left: 20px;
-    white-space: nowrap;
-  }
-  
-  .authorInfo {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .authorProfilePic {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-  
-  .authorName {
-    font-size: 18px;
-    font-weight: bold;
-  }
-  
-  .postTitle {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .postDescription {
-    margin-bottom: 10px;
-  }
-  
-  .postLikes {
-    margin-bottom: 10px;
-  }
-  
-  .attachmentContainer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .loadingContainer {
-    text-align: center;
-    margin-top: 20px;
-  }
+.likeButton {
+  padding: 8px 16px;
+  background-color: hsl(0, 100%, 91%);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+}
 
-  .like-button {
-    padding: 8px 16px;
-    background-color: #f0f0f0;
-    border: none;
-    border-radius: 4px;
-    cursor: grab;
-    font-size: 14px;
-    margin-top: 10px;
-  }
-  
-  .like-button:hover {
-    background-color: #e0e0e0;
-  }
-  
-  .childPostsContainer {
-    margin-top: 20px;
-  }
-  
-  .childPostWrapper {
-    border: 1px solid #ddd;
+.likeButton:hover {
+  background-color: #e0e0e0;
+}
+
+.responseSection {
+  margin-top: 20px;
+}
+
+.responseCount {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 5px;
+}
+
+.postLink {
+  font-size: 14px;
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.postLink:hover {
+  color: #0056b3;
+}
+
+.loadingContainer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+@media (max-width: 431px) {
+  .pageContainer {
     padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 4px;
   }
 
-
-  @media (max-width: 431px) {
-    .pageContainer {
-      padding: 10px; 
-    }
-  
-    .header {
-      font-size: 20px; 
-    }
-  
-    .postContainer {
-      padding: 10px; 
-    }
-  
-    .attachmentContainer {
-        grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
-        gap: 5px;
-      }
-  
-    .postContent,
-    .postLink {
-      flex-direction: column; 
-      align-items: center;
-      margin-left: 0; 
-    }
-  
-    .authorInfo {
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .authorProfilePic {
-      width: 40px; 
-      height: 40px;
-    }
-  
-    .authorName, .postTitle, .postDescription {
-      text-align: center;
-    }
-  
-    .like-button {
-      padding: 6px 12px; 
-      font-size: 12px;
-    }
+  .header {
+    font-size: 20px;
   }
-  
+
+  .postContainer {
+    padding: 10px;
+  }
+
+  .attachmentContainer {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+  }
+
+  .authorProfilePic {
+    width: 40px;
+    height: 40px;
+  }
+
+  .authorName,
+  .postTitle,
+  .postDescription {
+    text-align: center;
+  }
+
+  .likeButton {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
