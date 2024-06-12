@@ -1,91 +1,10 @@
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
 import { fetchFeed } from '../../src/lib/feedService';
 import styles from './FeedPage.module.css';
-
-//Handling the image attachments + videos
-const Attachment = ({ attachment }) => {
-  const [isFullScreen, setIsFullScreen] = useState(false);
-
-  const handleMediaClick = () => {
-    setIsFullScreen(!isFullScreen);
-  };
-
-  //Identify the images
-  const renderMedia = () => {
-    if (attachment.mime_type.includes('image')) {
-      return (
-        <Image
-          src={attachment.uri}
-          alt={attachment.description || 'Image'}
-          width={250}
-          height={250}
-          loading="lazy"
-          onClick={handleMediaClick}
-          //Ternary for SPEEEEEED
-          className={isFullScreen ? styles.fullScreenImage : ''}
-        />
-      );
-      //Identify the video
-    } else if (attachment.mime_type.includes('video')) {
-      return (
-        <video
-          width="250"
-          height="250"
-          controls
-          onClick={handleMediaClick}
-          className={isFullScreen ? styles.fullScreenVideo : ''}
-        >
-          <source src={attachment.uri} type={attachment.mime_type} />
-          Your browser does not support the video tag.
-        </video>
-      );
-    }
-  };
-
-  return (
-    <div className={styles.attachmentWrapper}>
-      {renderMedia()}
-    </div>
-  );
-};
-
-const ChildPost = ({ post, renderAttachments }) => {
-  return (
-    <div className={styles.childPostContainer}>
-      <div className={styles.postContent}>
-        {post.author && (
-          <div className={styles.authorInfo}>
-            {post.author.profile_pic && (
-              <Image
-                src={post.author.profile_pic.uri}
-                alt="Profile Photo"
-                width={30}
-                height={30}
-                loading="lazy"
-                className={styles.authorProfilePic}
-              />
-            )}
-            <h4 className={styles.authorName}>{post.author.display_name}</h4>
-          </div>
-        )}
-        <p className={styles.postDescription}>{post.description}</p>
-        {renderAttachments(post.attachments)}
-      </div>
-      {post.featured_children && post.featured_children.length > 0 && (
-        <div className={styles.childPosts}>
-          {post.featured_children.map((childPost) => (
-            <ChildPost key={childPost.id} post={childPost} renderAttachments={renderAttachments} />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
-
+import Post from '../../src/app/components/userPost/Post';
+ 
 
 const FeedPage = ({ token }) => {
   const [feed, setFeed] = useState([]);
@@ -96,6 +15,7 @@ const FeedPage = ({ token }) => {
   const [likedPosts, setLikedPosts] = useState([]);
   const [likeCounts, setLikeCounts] = useState({});
 
+  //See if there are likes
   useEffect(() => {
     const storedLikedPosts = localStorage.getItem('likedPosts');
     if (storedLikedPosts) {
@@ -103,6 +23,7 @@ const FeedPage = ({ token }) => {
     }
   }, []);
 
+  //Update the likes
   useEffect(() => {
     const storedLikeCounts = localStorage.getItem('likeCounts');
     if (storedLikeCounts) {
@@ -110,6 +31,7 @@ const FeedPage = ({ token }) => {
     }
   }, []);
 
+  //Implements the loading page.
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -120,11 +42,11 @@ const FeedPage = ({ token }) => {
         setIsLoading(false);
       } catch (error) {
         setError('Failed to fetch feed. Please try again.');
-        setIsLogading(false);
+        setIsLoading(false);
       }
     };
 
-    // I used IntersectionObserver to help with the lazy load of the feed.
+    //Page watcher for the "Lazy load" of the feed itself.
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && !isLoading) {
@@ -145,7 +67,8 @@ const FeedPage = ({ token }) => {
     };
   }, [token, cursor, isLoading]);
 
-  //Increment and decrement the like/unline
+  //Allows the user to Like and then Unlike a liked post.
+  //Leveraged local storage for this to make it persistance for the test.
   const handleLikeClick = (postId) => {
     const updatedLikedPosts = [...likedPosts];
     const index = updatedLikedPosts.indexOf(postId);
@@ -164,96 +87,27 @@ const FeedPage = ({ token }) => {
       }));
     }
 
+    //Send it!
     setLikedPosts(updatedLikedPosts);
     localStorage.setItem('likedPosts', JSON.stringify(updatedLikedPosts));
     localStorage.setItem('likeCounts', JSON.stringify(likeCounts));
-  };
-
-  //format the time for the extra wow factor
-  const formatCreatedAt = (createdAt) => {
-    const date = new Date(createdAt);
-    return date.toLocaleString();
-  };
-
-
-  const renderAttachments = (attachments) => {
-    if (!attachments || attachments.length === 0) {
-      return null;
-    }
-
-    return (
-      <div className={styles.attachmentContainer}>
-        {attachments.map((attachment) => (
-          <div key={attachment.id}>
-            {attachment.resource_type === 'asset' && (
-              <Attachment attachment={attachment} />
-            )}
-          </div>
-        ))}
-      </div>
-    );
   };
 
   if (error) {
     return <div>{error}</div>;
   }
 
-  //Whats wrong with the titles? I think titles/descriptions are flipped.
   return (
     <div className={styles.pageContainer}>
       <h1 className={styles.header}>Social Media Feed</h1>
       {feed.map((post) => (
-        <div key={post.id} className={styles.postContainer}>
-          <div className={styles.postContent}>
-            {post.author && (
-              <div className={styles.authorInfo}>
-                {post.author.profile_pic && (
-                  <Image
-                    src={post.author.profile_pic.uri}
-                    alt="Profile Photo"
-                    width={50}
-                    height={50}
-                    loading="lazy"
-                    className={styles.authorProfilePic}
-                  />
-                )}
-                <h3 className={styles.authorName}>{post.author.display_name}</h3>
-              </div>
-            )}
-            <p className={styles.postTitle}>Title: {post.title}</p>
-            <p className={styles.postDescription}>Description: {post.description}</p>
-            <p className={styles.postLikes}>
-              Likes: {likeCounts[post.id] || post.likes}
-            </p>
-
-            <button
-              className={styles.likeButton}
-              onClick={() => handleLikeClick(post.id)}
-            >
-              {likedPosts.includes(post.id) ? 'Unlike' : 'Like'}
-            </button>
-
-            {post.attachments && post.attachments.length > 0 && (
-              <>
-                <p>Media:</p>
-                {renderAttachments(post.attachments)}
-              </>
-            )}
-
-            {post.featured_children && post.featured_children.length > 0 && (
-              <div className={styles.responseSection}>
-                <div className={styles.responseCount}>
-                  <p>{post.featured_children.length} response(s)</p>
-                </div>
-
-              </div>
-
-            )}
-            <Link href={`/posts/${post.id}`} className={styles.postLink}>
-              Click here to see just this post.
-            </Link>
-          </div>
-        </div>
+        <Post
+          key={post.id}
+          post={post}
+          likedPosts={likedPosts}
+          likeCounts={likeCounts}
+          handleLikeClick={handleLikeClick}
+        />
       ))}
       <div ref={loaderRef} className={styles.loadingContainer}>
         {isLoading && <div>Loading more posts...</div>}
@@ -262,4 +116,4 @@ const FeedPage = ({ token }) => {
   );
 };
 
-export default FeedPage;
+export default FeedPage
