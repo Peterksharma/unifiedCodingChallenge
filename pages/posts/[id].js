@@ -1,3 +1,11 @@
+//This page is a brain dump. It needs to reuse the components from the Feed page for resuability.
+//Page works, not optimized.
+//Critical, after broken down into components it needs the like button and functions brought in here.
+//Allow the Child post to be hidden and expand.
+//Needs icons to indicate video.
+//Ran out of time for the styling.
+//Logic for this page mirrors the Feed page with the exception of ServerSideProps function. See function for notes.
+
 import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
 import { fetchPost } from '../../src/lib/postService'; 
@@ -49,7 +57,6 @@ const Attachment = ({ attachment }) => {
   );
 };
 
-
 const ChildPost = ({ post }) => {
   const formatCreatedAt = (createdAt) => {
     const date = new Date(createdAt);
@@ -76,25 +83,26 @@ const ChildPost = ({ post }) => {
 
   return (
     <div className={styles.childPost}>
-      <h3>{post.description}</h3>
-      {post.author && (
-        <>
-          {post.author.profile_pic && (
-            <Image
-              src={post.author.profile_pic.uri}
-              alt="Profile"
-              width={30}
-              height={30}
-              priority
-            />
-          )}
-          <p>{post.author.display_name}</p>
-        </>
-      )}
-      <p>Likes: {post.likes}</p>
+      <div className={styles.postContent}>
+        <p>{post.description}</p>
+        {post.author && (
+          <div className={styles.authorInfo}>
+            {post.author.profile_pic && (
+              <Image
+                src={post.author.profile_pic.uri}
+                alt="Profile"
+                width={30}
+                height={30}
+                priority
+              />
+            )}
+            <p>{post.author.display_name}</p>
+          </div>
+        )}
+        <p>Likes: {post.likes}</p>
+        <p>Created At: {formatCreatedAt(post.created_at)}</p>
+      </div>
       {renderAttachments(post.attachments)}
-      <p>Created At: {formatCreatedAt(post.created_at)}</p>
-
       {post.featured_children && post.featured_children.length > 0 && (
         <div className={styles.childPosts}>
           <h4>Responses:</h4>
@@ -143,35 +151,45 @@ const PostPage = ({ post, error }) => {
   };
 
   return (
-    <div>
-      <h1>{post.description}</h1>
-      {post.author && (
-        <>
-          {post.author.profile_pic && (
-            <Image
-              src={post.author.profile_pic.uri}
-              alt="Profile"
-              width={50}
-              height={50}
-              priority
-            />
+    <div className={styles.pageContainer}>
+      <div className={styles.postContainer}>
+        <div className={styles.postContent}>
+          <h1>{post.description}</h1>
+          {post.author && (
+            <div className={styles.authorInfo}>
+              {post.author.profile_pic && (
+                <Image
+                  src={post.author.profile_pic.uri}
+                  alt="Profile"
+                  width={50}
+                  height={50}
+                  priority
+                />
+              )}
+              <h3>{post.author.display_name}</h3>
+            </div>
           )}
-          <h3>{post.author.display_name}</h3>
-        </>
-      )}
-      <p>Description: {post.description}</p>
-      <p>Likes: {post.likes}</p>
-      {renderAttachments(post.attachments)}
-      <p>Created At: {formatCreatedAt(post.created_at)}</p>
-      <h2>Responses:</h2>
-      {post.featured_children.map((childPost) => (
-        <ChildPost key={childPost.id} post={childPost} />
-      ))}
+          <p>Likes: {post.likes}</p>
+          <p>Created At: {formatCreatedAt(post.created_at)}</p>
+        </div>
+        {renderAttachments(post.attachments)}
+        {post.featured_children && post.featured_children.length > 0 && (
+          <div className={styles.responseSection}>
+            <h2>Responses:</h2>
+            {post.featured_children.map((childPost) => (
+              <ChildPost key={childPost.id} post={childPost} />
+            ))}
+          </div>
+        )}
+      </div>
       <button onClick={() => router.back()}>Back to Feed</button>
     </div>
   );
 };
 
+
+//pre-render the props for the page for optimization.
+//Needed to add the cookie library to the token for server side.
 export async function getServerSideProps(context) {
   const { req, params } = context;
   const cookies = parse(req.headers.cookie || '');

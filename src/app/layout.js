@@ -6,6 +6,7 @@ import { getToken } from '../lib/authService';
 import './globals.css';
 import TokenContext from './TokenContext';
 
+//Quick Loading to help with slow internet.
 const LoadingSpinner = () => {
   return (
     <div className="loading-spinner">

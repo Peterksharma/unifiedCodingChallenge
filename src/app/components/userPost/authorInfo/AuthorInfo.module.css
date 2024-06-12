@@ -1,0 +1,33 @@
+.authorInfo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .authorProfilePic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+  
+  .authorProfilePic:hover {
+    opacity: 0.8;
+  }
+  
+  .authorName {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  @media (max-width: 431px) {
+    .authorProfilePic {
+      width: 40px;
+      height: 40px;
+    }
+  
+    .authorName {
+      text-align: center;
+    }
+  }

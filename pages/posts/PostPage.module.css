@@ -1,22 +1,16 @@
-/* Base styles */
 .pageContainer {
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 20px;
-    max-width: 800px;
-    margin: auto;
   }
   
   .postContainer {
     background-color: #f5f5f5;
-    border: 1px solid #ccc;
     border-radius: 8px;
-    padding: 15px;
+    padding: 20px;
     margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
   }
   
-  /* Text and media content styling */
   .header {
     font-size: 24px;
     font-weight: bold;
@@ -25,23 +19,45 @@
     margin-bottom: 20px;
   }
   
-  .loadingContainer,
+  .postContent {
+    margin-bottom: 20px;
+  }
+  
+  .authorInfo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .authorProfilePic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
   .attachmentContainer {
-    text-align: center;
-    margin-top: 20px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 10px;
-    padding: 10px;
+    margin-top: 20px;
   }
   
-  .imageContainer,
   .attachmentWrapper {
-    margin-top: 10px;
-    border: 1px solid #ddd;
-    padding: 10px;
-    display: inline-block;
     position: relative;
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 100%;
+  }
+  
+  .attachmentWrapper img,
+  .attachmentWrapper video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   
   .fullScreenImage {
@@ -55,11 +71,52 @@
     background-color: rgba(0, 0, 0, 0.8);
   }
   
-  /* Responsive design adjustments */
+  .fullScreenVideo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  
+  .responseSection {
+    margin-top: 20px;
+  }
+  
+  .childPost {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .childPosts {
+    margin-top: 10px;
+  }
+  
+  .likeButton {
+    padding: 8px 16px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
+  .likeButton:hover {
+    background-color: #e0e0e0;
+  }
+  
   @media (max-width: 431px) {
-    .pageContainer,
-    .postContainer,
-    .header {
+    .pageContainer {
+      padding: 10px;
+    }
+  
+    .postContainer {
       padding: 10px;
     }
   
@@ -67,30 +124,12 @@
       font-size: 20px;
     }
   
-    .postContainer {
-      flex-direction: column;
+    .authorProfilePic {
+      width: 40px;
+      height: 40px;
     }
   
     .attachmentContainer {
-      grid-template-columns: 1fr; /* Single column layout */
-    }
-  
-    .authorInfo,
-    .postContent,
-    .postLink {
-      align-items: center;
-      flex-direction: column;
-      margin-left: 0;
-    }
-  
-    .authorProfilePic {
-      width: 40px;
-      height: 40ad
-    }
-  
-    .like-button {
-      padding: 6px 12px;
-      font-size: 12px;
+      grid-template-columns: 1fr;
     }
   }
-  
