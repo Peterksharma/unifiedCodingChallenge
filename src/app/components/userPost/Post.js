@@ -10,7 +10,7 @@ const Post = ({ post, likedPosts, likeCounts, handleLikeClick }) => {
     if (!attachments || attachments.length === 0) {
       return null;
     }
-
+  
     return (
       <div className={styles.attachmentContainer}>
         {attachments.map((attachment) => (
